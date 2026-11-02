@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head><script src="https://myhub.ia.br/canvas-vendor/tailwind.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: 'Aileron', Helvetica, Arial, sans-serif;
+    background: #ffffff;
+    color: #662e39;
+    line-height: 1.6;
+    font-size: 15px;
+  }
+  .wrap { max-width: 980px; margin: 0 auto; padding: 36px 24px 48px; }
+
+  /* Cabeçalho */
+  .hero {
+    display: flex;
+    gap: 36px;
+    align-items: center;
+    border-bottom: 3px solid #f6f4b5;
+    padding-bottom: 32px;
+    margin-bottom: 32px;
+  }
+  .hero img {
+    width: 260px;
+    height: 330px;
+    object-fit: cover;
+    border-radius: 18px;
+    flex-shrink: 0;
+  }
+  .hero-texto h1 {
+    font-size: 40px;
+    line-height: 1.1;
+    margin: 0 0 12px;
+    font-weight: 900;
+    letter-spacing: 0.5px;
+  }
+  .hero-texto .sub { font-size: 17px; margin: 0 0 18px; font-style: italic; }
+  .credito {
+    display: inline-block;
+    background: #662e39;
+    color: #ffffff;
+    padding: 8px 14px;
+    border-radius: 999px;
+    font-size: 12px;
+    letter-spacing: 1px;
+    font-weight: 700;
+  }
+
+  /* Cards */
+  .grade {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 18px;
+  }
+  .card {
+    background: #ffffff;
+    border: 2px solid #662e39;
+    border-radius: 16px;
+    padding: 20px;
+    cursor: pointer;
+    text-align: left;
+    font-family: inherit;
+    color: #662e39;
+    transition: transform .15s, background .15s;
+  }
+  .card:hover { transform: translateY(-3px); background: #f6f4b5; }
+  .card .num {
+    display: inline-block;
+    background: #662e39;
+    color: #ffffff;
+    border-radius: 8px;
+    padding: 2px 10px;
+    font-weight: 700;
+    font-size: 13px;
+    margin-bottom: 10px;
+  }
+  .card h3 { margin: 0 0 8px; font-size: 17px; font-weight: 800; line-height: 1.3; }
+  .card p { margin: 0; font-size: 13.5px; font-style: italic; }
+
+  /* Detalhe */
+  #detalhe { display: none; }
+  .voltar {
+    background: #ffffff;
+    border: 2px solid #662e39;
+    color: #662e39;
+    border-radius: 999px;
+    padding: 8px 18px;
+    font-family: inherit;
+    font-weight: 700;
+    cursor: pointer;
+    margin-bottom: 24px;
+  }
+  .voltar:hover { background: #f6f4b5; }
+  .titulo-secao {
+    background: #662e39;
+    color: #ffffff;
+    border-radius: 16px;
+    padding: 24px 28px;
+    margin-bottom: 22px;
+  }
+  .titulo-secao h2 { margin: 0; font-size: 26px; font-weight: 900; }
+  .titulo-secao p { margin: 6px 0 0; font-style: italic; color: #f6f4b5; }
+  .bloco { margin-bottom: 18px; }
+  .bloco h4 { margin: 0 0 6px; font-size: 16px; font-weight: 800; }
+  .bloco p { margin: 0 0 8px; }
+  .bloco ul { margin: 4px 0 8px; padding-left: 22px; }
+  .bloco li { margin-bottom: 4px; }
+  .destaque {
+    background: #f6f4b5;
+    border-left: 6px solid #662e39;
+    border-radius: 10px;
+    padding: 14px 18px;
+    margin: 16px 0;
+    font-weight: 700;
+  }
+  .atencao {
+    border: 2px solid #662e39;
+    border-radius: 10px;
+    padding: 12px 16px;
+    margin: 14px 0;
+  }
+  .navegacao {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 28px;
+    border-top: 2px solid #f6f4b5;
+    padding-top: 18px;
+  }
+  .navegacao button {
+    background: #662e39;
+    color: #ffffff;
+    border: none;
+    border-radius: 999px;
+    padding: 10px 18px;
+    font-family: inherit;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .navegacao button:disabled { opacity: .3; cursor: default; }
+
+  .rodape {
+    margin-top: 40px;
+    text-align: center;
+    font-size: 13px;
+    border-top: 2px solid #f6f4b5;
+    padding-top: 18px;
+  }
+  .rodape strong { display: block; font-size: 15px; font-weight: 900; }
+
+  @media (max-width: 720px) {
+    .hero { flex-direction: column; text-align: center; }
+    .hero img { width: 200px; height: 255px; }
+    .hero-texto h1 { font-size: 30px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hero" id="capa">
+    <img src="https://d31zra5bs5df64.cloudfront.net/prod/3F2zAAtKbcKWNYSQtm8QyKRYL1r/chat/3LYOkZZ0LQ5G6Qmx6S4b8u10cgg/3LYaCvVDPAeIiC4Zn1s82aAK4Ws.png?Expires=1793636930&Key-Pair-Id=K2FT0I8VPJSP5H&Signature=o6TorgskyIIxGSWhUXc~TOkVQxPJOxzcMZCRu7skabstfU9i3kGvfU31I3AwvjzS6ISgfpn1iO16XNrkrR78wLg4DL2iN-co00tEyMmo1PvKpLvpGsqsYqXFO8o2~9mynklMy8uYCnZxinoovt3s0CK4Oz66-oWsTPt~6hmYlJtklwrKaoSepiMegYkQLGVC8PjM-sIMtrsFbdG5zfPOgojCjoKfbe4qA620yMZxwqWitzRh8CEbiGRdc7sgT1OOt6fi02TLP7hddDAbnFJbTy9Cr9EAVQXPk4kMTAIw4rbGAu8tZ8GWtpcylWGpl3E9tTBmS4ljbZGZ4LLQ~nUxfQ__" alt="Patricia Aguilera">
+    <div class="hero-texto">
+      <h1>GUIA DE FINAL DE ANO</h1>
+      <p class="sub">Como aproveitar as festas, as férias e as viagens sem deixar o desconforto gastrointestinal tomar conta dos seus dias.</p>
+      <span class="credito">ELABORADO POR PATRICIA AGUILERA - NUTRI DE MULHERES COM TAG</span>
+    </div>
+  </header>
+
+  <section id="grade-view">
+    <div class="grade" id="grade"></div>
+  </section>
+
+  <section id="detalhe">
+    <button class="voltar" id="btn-voltar">← Voltar aos temas</button>
+    <div id="conteudo"></div>
+    <div class="navegacao">
+      <button id="btn-anterior">← Anterior</button>
+      <button id="btn-proximo">Próximo →</button>
+    </div>
+  </section>
+
+  <footer class="rodape">
+    <strong>Com carinho, Patricia Aguilera</strong>
+    Nutri de mulheres com TAG
+  </footer>
+</div>
+
+<script>
+const temas = [
+  {
+    titulo: "Antes de começar, um recado importante!",
+    resumo: "Por que não precisamos escolher entre aproveitar e cuidar de você.",
+    html: `
+      <div class="bloco"><p>Chegamos ao final do ano! E, com ele, vêm as confraternizações, as ceias, as viagens, as mudanças de rotina e, muitas vezes, momentos em que a <em>ansiedade</em> e os desconfortos gastrointestinais aparecem com mais intensidade.</p>
+      <p>Preparei este guia para te ajudar a passar por esse período com mais tranquilidade, cuidando da sua alimentação e do seu corpo.</p>
+      <p>Não é porque chegaram as festas que você precisa deixar de lado os hábitos que construímos até aqui.</p>
+      <p>A ideia não é seguir regras, restringir alimentos ou ficar preocupada com cada coisa que vai comer. É conseguir <strong>aproveitar</strong>, fazer suas escolhas e, ao mesmo tempo, <strong>respeitar os sinais do seu corpo</strong>.</p></div>
+      <div class="destaque">Você não precisa escolher entre aproveitar as festas e cuidar de você. É possível fazer os dois!</div>`
+  },
+  {
+    titulo: "Como evitar o embrulho no estômago durante as festas?",
+    resumo: "Cinco cuidados simples para chegar à ceia sem passar mal.",
+    html: `
+      <div class="bloco"><h4>1. Não chegue à ceia com uma fome absurda.</h4>
+      <p>Passar o dia comendo pouco para aproveitar a ceia pode fazer você comer rápido demais e sentir enjoo, estufamento e refluxo.</p>
+      <ul><li>Mantenha suas refeições ao longo do dia.</li><li>Não pule o almoço para compensar o jantar.</li><li>Se a ceia for mais tarde, faça um lanche à tarde.</li></ul></div>
+      <div class="bloco"><h4>2. Coma devagar, mesmo com muita fome.</h4>
+      <p>Comer rápido faz você mastigar menos e engolir mais ar.</p>
+      <ul><li>Mastigue bem antes de engolir.</li><li>Apoie os talheres enquanto mastiga.</li><li>Evite comer enquanto conversa ou resolve outras coisas.</li><li>Perceba quando começar a ficar satisfeita, sem esperar ficar cheia.</li></ul></div>
+      <div class="bloco"><h4>3. Evite passar a noite inteira beliscando.</h4>
+      <p>O beliscar contínuo faz você perder a noção de quanto já comeu.</p>
+      <div class="destaque">Monte seu prato, sente-se e aproveite. Se sentir vontade de mais, faça uma nova escolha conscientemente.</div></div>
+      <div class="bloco"><h4>4. Não precisa experimentar tudo de uma vez.</h4>
+      <p>Sirva <em>porções menores</em> do que quer experimentar. Se ainda quiser mais, você pode repetir.</p></div>
+      <div class="bloco"><h4>5. Cuidado com a mistura de grandes volumes de comida e bebida.</h4>
+      <p>Refeições volumosas com bebidas gaseificadas aumentam o estufamento e favorecem o refluxo. Você não precisa deixar o refrigerante ou a sobremesa; apenas evite consumir tudo rapidamente, ao mesmo tempo.</p></div>`
+  },
+  {
+    titulo: "Se você costuma ter refluxo, atenção a estes detalhes!",
+    resumo: "Gatilhos comuns e como reduzir o desconforto à noite.",
+    html: `
+      <div class="bloco"><p>O refluxo pode piorar com grande volume alimentar, refeições gordurosas, álcool e quando você se deita logo depois de comer.</p>
+      <ul>
+        <li><strong>Modere as bebidas gaseificadas:</strong> refrigerantes, água com gás e espumantes podem aumentar a distensão e os arrotos.</li>
+        <li><strong>Cuidado com as refeições gordurosas:</strong> frituras, carnes muito gordas e molhos cremosos podem piorar os sintomas.</li>
+        <li><strong>Não se deite logo depois de comer:</strong> mantenha cerca de 2 a 3 horas entre a última refeição e deitar.</li>
+        <li><strong>Evite grandes volumes à noite.</strong></li>
+        <li><strong>Observe seus gatilhos:</strong> chocolate, café, álcool, tomate, limão e laranja podem piorar o refluxo. Não precisa excluir o que você tolera bem.</li>
+      </ul></div>
+      <div class="destaque">Dica extra: se tiver refluxo à noite, evite ficar deitada no sofá logo depois da ceia. Se for dormir, respeite o intervalo após a refeição.</div>`
+  },
+  {
+    titulo: "Quando a ansiedade aparece no estômago...",
+    resumo: "Como lidar com falta de apetite e enjoo sem criar mais cobrança.",
+    html: `
+      <div class="bloco"><p>Em dias de maior ansiedade, o apetite muda, o estômago parece embrulhado e surge enjoo. Nesses momentos, <strong>não transforme a dificuldade de comer em mais uma cobrança</strong>.</p></div>
+      <div class="bloco"><h4>1. Não espere a fome ficar muito intensa.</h4>
+      <p>Comece com pequenas quantidades de alimentos que você tolera bem:</p>
+      <ul><li>Banana amassada.</li><li>Torrada ou pão.</li><li>Iogurte, se houver boa tolerância.</li><li>Frutas menos ácidas.</li><li>Mingau de aveia.</li></ul></div>
+      <div class="bloco"><h4>2. Evite passar muitas horas sem comer.</h4>
+      <p>Pequenas refeições ao longo do dia valem mais do que uma grande refeição esquecida.</p></div>
+      <div class="bloco"><h4>3. Diminua o ritmo antes de comer.</h4>
+      <p>Respire, sente-se e afaste-se um pouco das atividades. Comer no meio de tarefas dificulta perceber os sinais do corpo.</p></div>
+      <div class="bloco"><h4>4. Cuidado com o excesso de café.</h4>
+      <p>A cafeína pode intensificar a ansiedade, e também o refluxo em algumas pessoas. Observe sua tolerância, principalmente à tarde e à noite.</p></div>
+      <div class="bloco"><h4>5. Não resolva o desconforto deixando de comer.</h4>
+      <p>Evitar comer por medo de passar mal aumenta a irregularidade alimentar. Respeite sua tolerância e não transforme o medo em nova restrição.</p></div>`
+  },
+  {
+    titulo: "Vai viajar? Não abandone seus cuidados!",
+    resumo: "Água, lanches práticos e cuidado com o intestino na estrada.",
+    html: `
+      <div class="bloco"><h4>5. Vai viajar? Não abandone seus cuidados!</h4>
+      <p>Férias são para aproveitar! Mas é comum que, durante as viagens, a alimentação fique desregulada, você passe muitas horas sem comer, esqueça de beber água e perceba mudanças no funcionamento do intestino.</p>
+      <p>Não precisa manter uma rotina perfeita durante as férias, mas alguns cuidados podem evitar que você passe boa parte da viagem com enjoo, estufamento, refluxo ou intestino desregulado.</p></div>
+      <div class="bloco"><h4>1. Aproveite o café da manhã do hotel para se preparar para o dia!</h4>
+      <p>Se você vai sair cedo para passear e sabe que ficará algumas horas sem acesso a alimentos, aproveite o café da manhã para fazer uma refeição que te dê mais saciedade.</p>
+      <ul><li>Inclua alguma fonte de proteína, como ovos, iogurte ou queijo.</li><li>Consuma frutas que você goste e tolere bem.</li><li>Inclua pão, tapioca ou outra fonte de carboidrato.</li><li>Não fique apenas no café e em um pãozinho se sabe que terá um dia longo pela frente.</li></ul>
+      <p>Uma dica extra: se o hotel disponibilizar frutas, você pode pegar uma para levar na bolsa e consumir mais tarde, durante o passeio. Assim, terá uma opção prática caso demore para encontrar algum lugar para comer.</p></div>
+      <div class="bloco"><h4>2. Não passe horas passeando sem se alimentar!</h4>
+      <p>É muito comum ficar tão envolvida nos passeios que você só percebe que está com fome quando já está com muita fome, enjoo ou fraqueza.</p>
+      <p>Para evitar isso:</p>
+      <ul><li>Leve uma fruta, barrinha, biscoito ou sanduíche na bolsa.</li><li>Aproveite os intervalos dos passeios para fazer um lanche.</li><li>Não espere chegar ao restaurante para perceber que está há muitas horas sem comer.</li><li>Se acordar cedo, programe minimamente os horários das refeições.</li></ul>
+      <p>Lembre-se: não é necessário comer a cada duas ou três horas obrigatoriamente, mas também não precisa passar o dia inteiro sem se alimentar.</p></div>
+      <div class="bloco"><h4>3. Cuide do funcionamento do intestino!</h4>
+      <p>Mudanças na alimentação, horários, hidratação e ambiente podem deixar o intestino mais preso durante as viagens.</p>
+      <p>Algumas estratégias:</p>
+      <ul><li>Aproveite as frutas disponíveis no café da manhã do hotel e leve algumas para consumir durante o dia.</li><li>Dê preferência a frutas que você costuma tolerar bem, como mamão, kiwi, laranja com bagaço e ameixa.</li><li>Inclua verduras e legumes nas refeições.</li><li>Mantenha a ingestão de água ao longo do dia.</li><li>Caminhe e aproveite os passeios para se movimentar.</li><li>Não ignore a vontade de evacuar por estar fora de casa.</li></ul>
+      <p>As frutas fornecem água e fibras, que podem contribuir para o funcionamento intestinal. Mas lembre-se de que o efeito depende da fruta, da quantidade consumida e da sua tolerância.</p></div>
+      <div class="bloco"><h4>4. Não esqueça da água durante os passeios!</h4>
+      <p>Em viagens, principalmente em lugares quentes, é muito fácil passar horas caminhando e esquecer de beber água.</p>
+      <p>Tente:</p>
+      <ul><li>Começar o dia com um copo de água ao acordar.</li><li>Colocar uma garrafinha na bolsa ou mochila.</li><li>Beber água ao longo dos passeios, sem esperar sentir muita sede.</li><li>Aproveitar os momentos das refeições para tomar água.</li><li>Aumentar a atenção à hidratação quando estiver caminhando muito, suando ou passando tempo ao sol.</li></ul>
+      <p>Uma estratégia simples: sempre que parar para comer, lembre-se de pedir ou colocar um copo de água junto da refeição.</p></div>
+      <div class="bloco"><h4>5. Cuidado com o excesso de novidades em uma mesma refeição!</h4>
+      <p>Viajar também é conhecer a gastronomia do lugar, experimentar pratos diferentes e comer alimentos que não fazem parte da sua rotina.</p>
+      <p>Aproveite! Mas, se você tem um estômago mais sensível, tente não experimentar muitas preparações diferentes em grandes quantidades de uma só vez.</p>
+      <p>Por exemplo: se vai experimentar uma comida muito temperada ou gordurosa no almoço, observe como seu corpo reage antes de fazer uma refeição igualmente pesada no jantar.</p>
+      <p>Isso não significa evitar a gastronomia local, mas conhecer sua tolerância.</p></div>
+      <div class="bloco"><h4>6. Atenção aos alimentos e bebidas ácidas!</h4>
+      <p>Se você costuma ter refluxo ou queimação, observe sua tolerância a:</p>
+      <ul><li>Sucos de laranja, limão e abacaxi.</li><li>Drinks com frutas cítricas.</li><li>Refrigerantes e bebidas gaseificadas.</li><li>Molhos à base de tomate.</li><li>Preparações muito ácidas.</li></ul>
+      <p>Não precisa excluir tudo preventivamente. Mas, se perceber que algum desses itens piora seus sintomas, evite grandes quantidades durante a viagem.</p></div>
+      <div class="bloco"><h4>7. Cuidado com refeições muito volumosas depois de passar o dia sem comer!</h4>
+      <p>Imagine passar a manhã inteira passeando, não fazer nenhum lanche e chegar ao almoço com muita fome. A tendência é comer rapidamente e em uma quantidade maior, o que pode favorecer enjoo, estufamento e refluxo.</p>
+      <p>Por isso, tente não deixar para resolver toda a alimentação do dia em uma única refeição. Faça refeições ao longo do dia, respeitando sua fome e sua rotina.</p></div>
+      <div class="destaque"><strong>Lembre-se: você está de férias, não de seus cuidados!</strong><br>Não precisa contar calorias, pesar alimentos ou seguir horários rígidos. Mas também não precisa passar o dia inteiro sem comer, esquecer da água e terminar a viagem com o intestino desregulado.<br>Pequenas escolhas durante o dia podem fazer muita diferença para você aproveitar melhor cada passeio!</div>`
+  },
+
+  {
+    titulo: "Vai consumir bebida alcoólica? Alguns cuidados importantes!",
+    resumo: "Como beber com menos desconforto e sem prejudicar o sono.",
+    html: `
+      <div class="bloco"><p>Se decidir consumir bebidas alcoólicas nas confraternizações, lembre-se de que o álcool pode irritar o trato gastrointestinal, favorecer o refluxo e piorar a qualidade do sono. Além disso, algumas combinações podem aumentar a sensação de estômago embrulhado, enjoo e estufamento.</p>
+      <p>Alguns cuidados importantes:</p></div>
+      <div class="bloco"><h4>1. Não consuma álcool com o estômago vazio.</h4>
+      <p>Faça uma refeição antes de beber. Consumir álcool sem ter se alimentado pode aumentar a irritação gástrica e favorecer o enjoo.</p></div>
+      <div class="bloco"><h4>2. Atenção às bebidas fermentadas e gaseificadas.</h4>
+      <p>Espumante e cerveja, por exemplo, podem aumentar a distensão abdominal, os arrotos e o desconforto gastrointestinal. Quando associados a refeições muito gordurosas, como churrasco, frituras e carnes mais pesadas, podem favorecer ainda mais o refluxo e a sensação de estômago cheio.</p></div>
+      <div class="bloco"><h4>3. Cuidado ao misturar diferentes tipos de bebidas.</h4>
+      <p>Observe sua tolerância às combinações! Algumas pessoas sentem mais enjoo e embrulho no estômago quando intercalam bebidas muito doces, como drinks e coquetéis, com bebidas gaseificadas ou fermentadas, como cerveja e espumante.</p>
+      <p>Não significa que essa mistura necessariamente fará mal, mas vale observar como seu organismo reage e evitar combinações que você já sabe que provocam desconforto.</p></div>
+      <div class="bloco"><h4>4. Não beba rapidamente ou em grandes quantidades.</h4>
+      <p>Procure consumir devagar, respeitando seus limites. Quanto maior a quantidade de álcool, maiores os riscos de desconforto gastrointestinal, ressaca e piora da ansiedade no dia seguinte.</p></div>
+      <div class="bloco"><h4>5. Intercale com água.</h4>
+      <p>Mantenha a hidratação ao longo da confraternização. Deixe um copo de água por perto e intercale com as bebidas alcoólicas.</p>
+      <p>Lembre-se: beber água não elimina os efeitos do álcool nem acelera sua metabolização.</p></div>
+      <div class="bloco"><h4>6. Atenção aos alimentos e bebidas ácidas.</h4>
+      <p>Drinks com limão, laranja, abacaxi e outras frutas cítricas podem piorar o refluxo em algumas pessoas. Observe sua tolerância e evite grandes quantidades se perceber que provocam queimação ou enjoo.</p></div>
+      <div class="bloco"><h4>7. Cuidado com a ansiedade no dia seguinte.</h4>
+      <p>O álcool pode prejudicar a qualidade do sono e aumentar sintomas de ansiedade, irritabilidade e palpitação no dia seguinte. Se você já percebe essa relação, vale considerar reduzir ou evitar o consumo.</p>
+      <p>Se estiver usando medicamentos, confira com seu médico ou farmacêutico se existe interação com álcool.</p></div>
+      <div class="destaque"><strong>E lembre-se: a melhor forma de reduzir os riscos relacionados ao álcool é não consumir ou reduzir a quantidade.</strong> Você não precisa beber para aproveitar a confraternização!</div>`
+  },
+  {
+    titulo: "Como evitar passar mal no dia seguinte?",
+    resumo: "O que fazer para retomar a rotina sem se punir.",
+    html: `
+      <div class="bloco"><p>Depois da ceia, é comum acordar com estômago pesado, estufamento, azia ou intestino desregulado. O primeiro cuidado é <strong>não tentar compensar</strong> o que comeu no dia anterior.</p></div>
+      <div class="bloco"><h4>1. Volte à alimentação habitual.</h4>
+      <p>Não pule refeições e não faça jejum. Voltar à rotina é mais importante do que tentar corrigir o que aconteceu.</p></div>
+      <div class="bloco"><h4>2. Comece o dia com hidratação.</h4>
+      <p>Beba água ao acordar e ao longo do dia. A hidratação repõe líquidos, mas não é uma cura para a ressaca.</p></div>
+      <div class="bloco"><h4>3. Escolha refeições confortáveis.</h4>
+      <ul><li>Arroz, frango e legumes cozidos.</li><li>Batata ou purê com uma fonte de proteína.</li><li>Sopas e preparações leves.</li><li>Pão ou torrada com proteína.</li></ul>
+      <p>Não é preciso fazer dieta detox ou consumir apenas líquidos.</p></div>
+      <div class="bloco"><h4>4. Não exagere no café para combater o cansaço.</h4>
+      <p>O excesso de cafeína pode piorar ansiedade, palpitação e dificultar o sono da noite seguinte.</p></div>
+      <div class="bloco"><h4>5. Faça um movimento leve, se estiver bem.</h4>
+      <p>Uma caminhada ajuda a retomar a rotina e favorece o intestino. Não precisa de exercício intenso para compensar.</p></div>
+      <div class="bloco"><h4>6. Priorize o sono.</h4>
+      <p>Uma noite mal dormida aumenta a sensibilidade ao estresse e deixa a ansiedade mais evidente. Evite refeições volumosas perto de deitar.</p></div>`
+  },
+  {
+    titulo: "E se o intestino desregular durante as festas?",
+    resumo: "Orientações para intestino preso ou solto e sinais de alerta.",
+    html: `
+      <div class="bloco"><h4>Se o intestino ficar preso:</h4>
+      <ul><li>Aumente a ingestão de água.</li><li>Mantenha frutas e vegetais, respeitando sua tolerância.</li><li>Inclua caminhadas.</li><li>Não ignore a vontade de evacuar.</li><li>Tente manter horários regulares para comer.</li></ul></div>
+      <div class="bloco"><h4>Se o intestino ficar solto:</h4>
+      <ul><li>Priorize a hidratação.</li><li>Se houver muitas evacuações, considere solução de reidratação oral.</li><li>Faça refeições pequenas, com alimentos que você tolera.</li><li>Evite temporariamente excesso de gordura, álcool e cafeína.</li></ul></div>
+      <div class="atencao"><strong>Atenção:</strong> diarreia persistente, sangue nas fezes, febre, dor abdominal intensa ou sinais de desidratação precisam de avaliação médica. Não atribua automaticamente qualquer alteração intestinal à ansiedade.</div>`
+  },
+  {
+    titulo: "Sentiu culpa depois de comer? Leia isso antes de tentar compensar!",
+    resumo: "Como lidar com a culpa sem transformar a comida em punição.",
+    html: `
+      <div class="bloco"><p>É muito comum que, depois de uma ceia, confraternização ou refeição diferente da rotina, apareçam pensamentos como:</p>
+      <ul><li>"Comi demais, não deveria ter comido tudo isso."</li><li>"Amanhã vou precisar comer menos para compensar."</li><li>"Estraguei todo o meu progresso."</li><li>"Agora que já saí da dieta, vou aproveitar e depois volto."</li><li>"Não deveria ter comido aquela sobremesa."</li></ul>
+      <p>Mas quero que você entenda uma coisa: <strong>uma refeição não define seus resultados, sua saúde ou o seu progresso.</strong></p>
+      <p>Comer mais do que costuma comer em uma ocasião especial não significa que você perdeu o controle ou que precisa fazer alguma coisa para corrigir isso.</p></div>
+      <div class="bloco"><h4>O que fazer quando a culpa aparecer?</h4></div>
+      <div class="bloco"><h4>1. Não tente compensar no dia seguinte.</h4>
+      <p>Não pule o café da manhã, não faça jejum e não reduza drasticamente sua alimentação para tentar equilibrar o que comeu. Isso pode criar um ciclo de restrição, fome intensa e novos episódios de exagero.</p></div>
+      <div class="bloco"><h4>2. Não transforme um alimento em motivo de punição.</h4>
+      <p>Você pode comer sobremesa, experimentar uma preparação diferente e aproveitar uma comida que gosta sem precisar passar o restante do dia se culpando.</p></div>
+      <div class="bloco"><h4>3. Evite ficar se pesando depois das festas.</h4>
+      <p>Uma refeição mais volumosa, maior consumo de sódio, alterações na hidratação e no funcionamento intestinal podem provocar oscilações temporárias no peso. Isso não significa que você ganhou a mesma quantidade em gordura corporal.</p></div>
+      <div class="bloco"><h4>4. Não fique revivendo mentalmente tudo o que comeu.</h4>
+      <p>Ficar calculando, lembrando cada alimento e pensando no que deveria ter deixado de comer só aumenta a preocupação e não muda o que aconteceu. Quando perceber esse pensamento, tente direcionar sua atenção para o momento presente.</p></div>
+      <div class="bloco"><h4>5. Retome sua alimentação normalmente.</h4>
+      <p>Sua próxima refeição não precisa ser menor, mais restritiva ou diferente para compensar a anterior. Apenas continue cuidando de você, respeitando sua fome, sua saciedade e sua rotina.</p></div>
+      <div class="bloco"><h4>6. Aproveite sem transformar a comida em uma prova de autocontrole.</h4>
+      <p>Você não precisa demonstrar que tem controle recusando alimentos, nem provar que está aproveitando comendo tudo o que aparece. Pode comer o que deseja, parar quando estiver satisfeita e fazer escolhas diferentes em cada ocasião.</p></div>
+      <div class="atencao"><strong>Um último lembrete da Paty:</strong>
+      <p>O objetivo do nosso acompanhamento nunca foi fazer você comer perfeitamente todos os dias. É te ajudar a construir uma relação mais tranquila com a alimentação, inclusive nos dias em que você come diferente, sente mais fome ou sai da rotina.</p>
+      <p>Você não precisa terminar o ano com a sensação de que falhou porque comeu algo a mais. Não transforme momentos que deveriam ser felizes em mais um motivo para se cobrar.</p></div>
+      <div class="destaque"><strong>A comida faz parte da vida. E sua vida não precisa girar em torno dela.</strong></div>`
+  },
+  {
+    titulo: "O que eu quero que você lembre nesse período",
+    resumo: "Aproveitar não significa exagerar em tudo.",
+    html: `
+      <div class="destaque">
+        Você pode comer a sobremesa.<br>
+        Pode repetir aquele prato que gosta.<br>
+        Pode experimentar uma comida diferente na viagem.<br>
+        Pode sair da rotina.<br>
+        Pode aproveitar a companhia das pessoas que ama.
+      </div>
+      <div class="bloco"><p>Mas também pode parar quando estiver satisfeita, respeitar quando o estômago não estiver confortável e escolher não comer algo que sabe que costuma te fazer mal.</p>
+      <p><strong><em>Aproveitar não significa exagerar em tudo.</em></strong></p>
+      <p>Não vale a pena transformar um momento gostoso em horas de enjoo, queimação e estufamento. E, principalmente, não use o dia seguinte para se punir pelo que comeu.</p>
+      <p>O objetivo é ter uma relação mais tranquila com a alimentação, inclusive nos dias em que a rotina muda.</p></div>
+      <div class="destaque">Cuide de você, aproveite as festas e não se cobre perfeição.</div>`
+  }
+];
+
+let atual = 0;
+
+function renderGrade() {
+  const grade = document.getElementById('grade');
+  grade.innerHTML = temas.map((t, i) => `
+    <button class="card" data-i="${i}">
+      <span class="num">${String(i + 1).padStart(2, '0')}</span>
+      <h3>${t.titulo}</h3>
+      <p>${t.resumo}</p>
+    </button>
+  `).join('');
+  grade.querySelectorAll('.card').forEach(c => {
+    c.addEventListener('click', () => abrir(Number(c.dataset.i)));
+  });
+}
+
+function abrir(i) {
+  atual = i;
+  const t = temas[i];
+  document.getElementById('conteudo').innerHTML = `
+    <div class="titulo-secao">
+      <h2>${String(i + 1).padStart(2, '0')}. ${t.titulo}</h2>
+      <p>${t.resumo}</p>
+    </div>
+    ${t.html}
+  `;
+  document.getElementById('btn-anterior').disabled = i === 0;
+  document.getElementById('btn-proximo').disabled = i === temas.length - 1;
+  document.getElementById('grade-view').style.display = 'none';
+  document.getElementById('capa').style.display = 'none';
+  document.getElementById('detalhe').style.display = 'block';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function voltar() {
+  document.getElementById('detalhe').style.display = 'none';
+  document.getElementById('grade-view').style.display = 'block';
+  document.getElementById('capa').style.display = 'flex';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+document.getElementById('btn-voltar').addEventListener('click', voltar);
+document.getElementById('btn-anterior').addEventListener('click', () => { if (atual > 0) abrir(atual - 1); });
+document.getElementById('btn-proximo').addEventListener('click', () => { if (atual < temas.length - 1) abrir(atual + 1); });
+
+renderGrade();
+</script>
+</body>
+</html>
